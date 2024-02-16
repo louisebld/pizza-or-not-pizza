@@ -1,10 +1,24 @@
 import shutil
 import requests
 from fastapi import FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 API_URL = "https://api-inference.huggingface.co/models/louisebld/pizza-or-not-pizza-model"
 token = "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"
 headers = {"Authorization": f"Bearer {token}"}
+
+origins = ["*"]
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def query(filename):
     with open(filename, "rb") as f:
@@ -12,7 +26,6 @@ def query(filename):
     response = requests.post(API_URL, headers=headers, data=data)
     return response.json()
 
-app = FastAPI()
 
 @app.get("/my-first-api")
 def hello():
