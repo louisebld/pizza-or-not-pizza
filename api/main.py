@@ -23,7 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 def query(filename):
     with open(filename, "rb") as f:
         data = f.read()
@@ -44,5 +43,3 @@ async def predict(file: UploadFile | None = None):
             shutil.copyfileobj(file.file, buffer)
         output = query("temp.png")
         return output
-
-
