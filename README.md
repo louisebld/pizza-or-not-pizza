@@ -16,3 +16,9 @@ Les routes disponibles sont les suivantes :
     /predict : Permet de prédire si une image est une pizza ou non (POST)
 
 
+## Lancement du front 🚀
+
+Pour lancer le front-end, il suffit de lancer la commande suivante :
+
+    npm install
+    npm run dev
