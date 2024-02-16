@@ -5,7 +5,7 @@
 
 Pour lancer l'API, il suffit de lancer la commande suivante :
 
-    pip install fastapi uvicorn python-multipart
+    pip install fastapi uvicorn python-multipart python-dotenv
     uvicorn main:app --reload
     
 ## Utilisation de l'API 🍕

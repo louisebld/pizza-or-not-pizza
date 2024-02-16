@@ -2,9 +2,13 @@ import shutil
 import requests
 from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 API_URL = "https://api-inference.huggingface.co/models/louisebld/pizza-or-not-pizza-model"
-token = "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"
+token = os.getenv("HUGGING_FACE_TOKEN")
 headers = {"Authorization": f"Bearer {token}"}
 
 origins = ["*"]
