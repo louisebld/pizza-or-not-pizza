@@ -13,4 +13,12 @@
 html {
   font-family: "Pizzat", sans-serif;
 }
+
+.container {
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 20vh;
+}
 </style>

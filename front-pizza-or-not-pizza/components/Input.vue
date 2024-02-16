@@ -4,7 +4,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      answer: "",
+      value: "",
+      pourcentage: "",
     };
   },
   methods: {
@@ -15,18 +16,26 @@ export default {
       formData.append("file", file);
 
       axios.post("http://localhost:8000/predict", formData).then((response) => {
-        console.log(response.data);
-        this.answer = response.data;
+        this.extractAnswer(response);
       });
+    },
+    extractAnswer(response) {
+      this.value = response.data[0].label;
+      this.pourcentage = response.data[0].score;
+      this.pourcentage = Math.round(this.pourcentage * 100);
     },
   },
 };
 </script>
+
 <template>
   <div>
     <input type="file" />
     <button @click="sendFile">Send</button>
-    <p>{{ answer }}</p>
+    <div v-if="value != ''">
+      <p v-if="value == 'pizza'">{{ pourcentage }}% of PIZZA</p>
+      <p v-else>{{ pourcentage }}% of NOT PIZZA</p>
+    </div>
   </div>
 </template>
 
