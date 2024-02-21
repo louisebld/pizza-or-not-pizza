@@ -1,13 +1,33 @@
 <script>
 import axios from "axios";
+import { Pie } from "vue-chartjs";
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default {
+  components: { Pie },
   data() {
     return {
       value: "",
-      pourcentage: "",
+      file: "",
+      chart: null,
+      loaded: false,
+      chartData: {
+        labels: ["Which pizza are you?"],
+        datasets: [
+          {
+            label: "Pizza",
+            data: [1],
+            backgroundColor: ["rgba(255, 99, 132, 0.2)"],
+            borderColor: ["rgba(255, 99, 132, 1)"],
+            borderWidth: 1,
+          },
+        ],
+      },
     };
   },
+
   methods: {
     sendFile() {
       console.log("File sent");
@@ -16,13 +36,40 @@ export default {
       formData.append("file", file);
 
       axios.post("http://localhost:8000/predict", formData).then((response) => {
-        this.extractAnswer(response);
+        this.value = response.data;
+        this.chartData = response.data;
+        this.isloaded = true;
+
+        console.log(response.data);
+
+        const labels = response.data.map((pizza) => pizza.label);
+        const data = response.data.map((pizza) => pizza.score);
+
+        this.chartData = {
+          labels: labels,
+          datasets: [
+            {
+              label: "Pizza",
+              data: data,
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+              ],
+              borderWidth: 1,
+            },
+          ],
+        };
       });
-    },
-    extractAnswer(response) {
-      this.value = response.data[0].label;
-      this.pourcentage = response.data[0].score;
-      this.pourcentage = Math.round(this.pourcentage * 100);
     },
   },
 };
@@ -30,12 +77,27 @@ export default {
 
 <template>
   <div>
-    <input type="file" />
-    <button @click="sendFile">Send</button>
-    <div v-if="value != ''">
-      <p v-if="value == 'pizza'">{{ pourcentage }}% of PIZZA</p>
-      <p v-else>{{ pourcentage }}% of NOT PIZZA</p>
+    <input type="file" @change="file = $event.target.files[0]" />
+    <button @click="sendFile">Envoyer</button>
+  </div>
+  <div v-if="value" class="result">
+    <div class="pie">
+      <Pie :data="chartData" :options="chartOptions" />
     </div>
+    Vous êtes une {{ value[0].label }} avec une probabilité de
+    {{ Math.round(value[0].score * 100) }}%
   </div>
 </template>
 
+<style>
+.pie {
+  width: 30rem;
+  height: 30rem;
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+</style>
