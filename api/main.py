@@ -4,6 +4,7 @@ from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from dotenv import load_dotenv
+import uvicorn
 
 load_dotenv()
 
@@ -43,3 +44,6 @@ async def predict(file: UploadFile | None = None):
             shutil.copyfileobj(file.file, buffer)
         output = query("temp.png")
         return output
+    
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
