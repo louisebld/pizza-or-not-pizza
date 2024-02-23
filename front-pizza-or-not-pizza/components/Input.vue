@@ -13,6 +13,7 @@ export default {
       file: "",
       chart: null,
       loaded: false,
+      error: "",
       chartData: {
         labels: ["Which pizza are you?"],
         datasets: [
@@ -41,6 +42,10 @@ export default {
         this.isloaded = true;
 
         console.log(response.data);
+
+        if (response.data.error) {
+          this.error = response.data.error;
+        }
 
         const labels = response.data.map((pizza) => pizza.label);
         const data = response.data.map((pizza) => pizza.score);
@@ -87,6 +92,7 @@ export default {
     Vous êtes une {{ value[0].label }} avec une probabilité de
     {{ Math.round(value[0].score * 100) }}%
   </div>
+  <div v-if="error" class="error">{{ error }}</div>
 </template>
 
 <style>
@@ -99,5 +105,14 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  transition: 0.3s;
 }
 </style>
