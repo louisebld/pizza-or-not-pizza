@@ -43,9 +43,12 @@ export default {
 
         console.log(response.data);
 
-        if (response.data.error) {
-          this.error = response.data.error;
+        if (response.error) {
+          this.error = response.error;
+          return;
         }
+
+        this.error = "";
 
         const labels = response.data.map((pizza) => pizza.label);
         const data = response.data.map((pizza) => pizza.score);
@@ -105,6 +108,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 1.5rem;
 }
 
 button {

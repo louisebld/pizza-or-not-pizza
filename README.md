@@ -26,3 +26,7 @@ Pour lancer le front-end, il suffit de lancer la commande suivante dans le dossi
     npm install
     npm run dev
 
+## Modèle Hugging Face 😃
+
+Voici le lien de notre modèle sur Hugging Face :
+    https://huggingface.co/louisebld/pizza-or-not-pizza-model
